@@ -14,16 +14,18 @@ def fix_page():
 
 
 @pytest.fixture
-def fix_stock_elements(fix_page):
+def fix_stock_element(fix_page):
     html_tree = html.fromstring(fix_page.content)
     stocks_elements = html_tree.xpath(
         '//div[@id="scr-res-table"]/div[1]/table/tbody//tr'
     )
-    return stocks_elements
+    return stocks_elements[0]
 
 
 @pytest.mark.vcr
-def test_parser(fix_stock_elements):
+def test_parser(fix_stock_element):
     parser = Parser()
-    stocks = parser.parse(fix_stock_elements)
-    assert len(stocks) == 25
+    stocks = parser.parse([fix_stock_element])
+    assert stocks == {
+        'MDT.BA': {'symbol': 'MDT.BA', 'name': 'Medtronic plc', 'price': '5188.50'}
+    }

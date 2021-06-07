@@ -23,5 +23,6 @@ def test_init(fix_filter, fix_webdriver):
 
 
 def test_filter_by_region(fix_filter):
-    url_without_filters = fix_filter.webdriver.current_url
-    assert not fix_filter.filter_by_region(region='Argentina') == url_without_filters
+    url_without_region = fix_filter.webdriver.current_url
+    url_with_region = fix_filter.filter_by_region(region='Argentina')
+    assert not url_with_region == url_without_region

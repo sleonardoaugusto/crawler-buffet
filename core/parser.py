@@ -24,9 +24,9 @@ class Parser:
 
     def extract_name(self, element: HtmlElement):
         try:
-            element.xpath(self.NAME_XPATH)[0]
+            return element.xpath(self.NAME_XPATH)[0]
         except IndexError:
             return None
 
     def extract_price(self, element: HtmlElement):
-        return element.xpath(self.PRICE_XPATH)[0]
+        return element.xpath(self.PRICE_XPATH)[0].replace(',', '')
