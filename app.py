@@ -1,15 +1,21 @@
 import requests
 from flask import Flask
+from flask_caching import Cache
 
 from core.crawler import Driver, Filter, Pagination, Crawler
 from core.parser import Parser
 
+cache = Cache(config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 193})
+
 app = Flask(__name__)
+cache.init_app(app)
 
 STOCKS_URL = 'https://finance.yahoo.com/screener/new'
 
 
 class Stocks:
+    BASE_URL = 'https://finance.yahoo.com/screener/new'
+
     def __init__(self, page):
         self.page = page
         self.filter = Filter(webdriver=page)
@@ -38,6 +44,7 @@ def get_stocks(region):
 
 
 @app.route('/stocks/<region>/')
+@cache.cached()
 def hello_world(region):
     stocks = get_stocks(region=region)
     return stocks
