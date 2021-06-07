@@ -9,14 +9,32 @@ app = Flask(__name__)
 STOCKS_URL = 'https://finance.yahoo.com/screener/new'
 
 
-def get_stocks(region):
+class Stocks:
+    def __init__(self, page):
+        self.page = page
+        self.filter = Filter(webdriver=page)
+        self.pagination = Pagination
+
+    def by_region(self, region):
+        url = self.filter.filter_by_region(region)
+        return self.get_stock_pages(url)
+
+    def get_stock_pages(self, url):
+        stock_urls = Pagination(url, requests)()
+        self.page.close()
+        return stock_urls
+
+
+def stocks_factory():
     driver = Driver()
     page = driver.get(STOCKS_URL)
-    filter = Filter(webdriver=page)
-    url = filter.filter_by_region(region)
-    page.close()
-    pagination = Pagination(url, requests)()
-    return Crawler(pagination, requests, Parser()).fetch_stocks()
+    return Stocks(page)
+
+
+def get_stocks(region):
+    stocks = stocks_factory()
+    stock_pages = stocks.by_region(region)
+    return Crawler(stock_pages, requests, Parser()).fetch_stocks()
 
 
 @app.route('/stocks/<region>/')
