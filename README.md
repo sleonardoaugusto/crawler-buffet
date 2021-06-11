@@ -1,4 +1,4 @@
-# Crawler Buffet
+# Crawler Buffett
 
 A stocks crawler application.
 
