@@ -1,7 +1,7 @@
 Flask==2.0.1
 selenium==3.141.0
 cssselect==1.1.0
-lxml==4.6.3
+lxml==4.9.1
 pytest==6.2.4
 pytest-mock==3.6.1
 pytest-vcr==1.0.2
